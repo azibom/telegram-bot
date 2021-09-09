@@ -4,17 +4,17 @@ require "./vendor/autoload.php";
 
 use TelegramBot\Classes\Telegram;
 
-$telegram = new Telegram("1997963802:AAHnNRQtNKdmdtquiHtPjeBzKkC2xCCAQzE");
-$telegram->getUpdate();
-$message = $telegram->getMessage();
-$telegram->sendMessage($message['chatID'], $message['text']);
-
-// $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
-// $txt = "John Doe\n";
-// fwrite($myfile, $txt);
-// $txt = "Jane Doe\n";
-// fwrite($myfile, $txt);
-// fclose($myfile);
+try {
+    $telegram = new Telegram("1997963802:AAHnNRQtNKdmdtquiHtPjeBzKkC2xCCAQzE");
+    $telegram->getUpdate();
+    $message = $telegram->getMessage();
+    $telegram->sendMessage($message['chatID'], $message['text']);
+} catch (Exception $e) {
+    $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
+    $txt = 'Caught exception : '.$e->getMessage()."\n";
+    fwrite($myfile, $txt);
+    fclose($myfile);
+}
 
 // $botToken = "1997963802:AAHnNRQtNKdmdtquiHtPjeBzKkC2xCCAQzE/";
 // $website = "https://api.telegram.org/bot" . $botToken;
