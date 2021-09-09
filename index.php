@@ -11,8 +11,8 @@ fwrite($myfile, $txt);
 fclose($myfile);
 
 try {
-    $telegram = new Telegram("1997963802:AAHnNRQtNKdmdtquiHtPjeBzKkC2xCCAQzE");
-    $telegram->getUpdate();
+    $contents = file_get_contents("php://input");
+    $telegram = new Telegram("1997963802:AAHnNRQtNKdmdtquiHtPjeBzKkC2xCCAQzE",$contents );
     $message = $telegram->getMessage();
     $telegram->sendMessage($message['chatID'], $message['text']);
 } catch (Exception $e) {

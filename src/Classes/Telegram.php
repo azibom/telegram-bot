@@ -9,18 +9,11 @@ class Telegram {
     private $botUrl;
     private $content = null;
 
-    public function __construct($botToken)
+    public function __construct($botToken, $contents)
     {
         $this->botToken = $botToken;
         $this->botUrl = self::BASE_BOT_URL . $botToken . "/";
-    }
-
-    public function getUpdate()
-    {
-        $contents = file_get_contents("php://input");
         $this->content = json_decode($contents, true);
-        
-        return $this->content;
     }
 
     public function getMessage()
