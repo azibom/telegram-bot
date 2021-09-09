@@ -52,17 +52,13 @@ class Telegram {
         return $this;
     }
 
-    public function addInlineKeyboard($keyboardddd)
+    public function addInlineKeyboard($keyboard)
     {
-        // $this->message["reply_markup"] = json_encode([
-        //     ["inline_keyboard" => $keyboard]
-        // ]);
+        $inlineKeyboard = array(
+            "inline_keyboard" => $keyboard
+        );
 
-        $keyboard = array(
-    "inline_keyboard" => $keyboardddd
-);
-
-$this->message["reply_markup"] = json_encode($keyboard);
+        $this->message["reply_markup"] = json_encode($inlineKeyboard);
 
         return $this;
     }
