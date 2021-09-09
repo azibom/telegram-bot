@@ -8,27 +8,24 @@ try {
     $telegram = new Telegram("1997963802:AAHnNRQtNKdmdtquiHtPjeBzKkC2xCCAQzE");
     $telegram->getUpdate();
     $message = $telegram->getMessage();
-    $telegram->sendMessage($message['chatID'], $message['text']);
+    $telegram->setMessage($message['chatID'], $message['text'])->addInlineKeyboard([
+        array(
+            array("text" => "1", "callback_data" => "myCallbackData"),
+            array("text" => "2", "callback_data" => "myCallbackData")
+        ),
+        array(
+            array("text" => "3", "callback_data" => "myCallbackData"),
+            array("text" => "4", "callback_data" => "myCallbackData")
+        ),
+    ]);
+    $telegram->sendMessage();
+
 } catch (Exception $e) {
     $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
     $txt = 'Caught exception : '.$e->getMessage()."\n";
     fwrite($myfile, $txt);
     fclose($myfile);
 }
-
-// $botToken = "1997963802:AAHnNRQtNKdmdtquiHtPjeBzKkC2xCCAQzE/";
-// $website = "https://api.telegram.org/bot" . $botToken;
-
-// $content = file_get_contents("php://input");
-
-// $myfile = fopen("newfile.txt", "a") or die("Unable to open file!"); 
-// $txt = "Jane Doe\n";
-// fwrite($myfile, ($content)); 
-// fclose($myfile);
-
-
-// $update = json_decode($content, true);
-
 
 
 // $t = array('ReplyKeyboardMarkup' => array('keyboard' => array(array("A", "B"))));

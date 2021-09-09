@@ -8,6 +8,7 @@ class Telegram {
     private $botToken;
     private $botUrl;
     private $content = null;
+    private $message = null;
 
     public function __construct($botToken)
     {
@@ -41,14 +42,28 @@ class Telegram {
         ];
     }
 
-    public function sendMessage($chatID, $text)
+    public function setMessage($chatID, $text)
     {
-        $args = array(
+        $this->message = array(
             "chat_id" => $chatID,
             "text" => $text,
         );
 
-        file_get_contents($this->botUrl."sendMessage?".http_build_query($args));
+        return $this;
+    }
+
+    public function addInlineKeyboard($keyboard)
+    {
+        $this->message["reply_markup"] = json_encode([
+            ["inline_keyboard" => $keyboard]
+        ]);
+
+        return $this;
+    }
+
+    public function sendMessage()
+    {
+        file_get_contents($this->botUrl."sendMessage?".http_build_query($this->message));
     }
 }
 
