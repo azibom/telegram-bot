@@ -8,7 +8,7 @@ try {
     $telegram = new Telegram("1997963802:AAHnNRQtNKdmdtquiHtPjeBzKkC2xCCAQzE");
     $telegram->getUpdate();
     $message = $telegram->getMessage();
-    $telegram->setMessage($message['chatID'], $message['text'])->addInlineKeyboard([
+    $telegram->setMessage($message['chatID'], $message['text'])->addInlineKeyboard(array(
         array(
             array("text" => "1", "callback_data" => "myCallbackData"),
             array("text" => "2", "callback_data" => "myCallbackData")
@@ -17,7 +17,7 @@ try {
             array("text" => "3", "callback_data" => "myCallbackData"),
             array("text" => "4", "callback_data" => "myCallbackData")
         ),
-    ]);
+    ));
     $telegram->sendMessage();
 
 } catch (Exception $e) {

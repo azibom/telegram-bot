@@ -54,9 +54,24 @@ class Telegram {
 
     public function addInlineKeyboard($keyboard)
     {
-        $this->message["reply_markup"] = json_encode([
-            ["inline_keyboard" => $keyboard]
-        ]);
+        // $this->message["reply_markup"] = json_encode([
+        //     ["inline_keyboard" => $keyboard]
+        // ]);
+
+        $keyboard = array(
+    "inline_keyboard" => array(
+        array(
+            array("text" => "1", "callback_data" => "myCallbackData"),
+            array("text" => "2", "callback_data" => "myCallbackData")
+        ),
+        array(
+            array("text" => "3", "callback_data" => "myCallbackData"),
+            array("text" => "4", "callback_data" => "myCallbackData")
+        ),
+    )
+);
+
+$this->message["reply_markup"] = json_encode($keyboard);
 
         return $this;
     }
