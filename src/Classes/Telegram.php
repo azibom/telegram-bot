@@ -63,7 +63,14 @@ class Telegram {
 
     public function sendMessage()
     {
-        file_get_contents($this->botUrl."sendMessage?".http_build_query($this->message));
+        $string = $this->botUrl."sendMessage?".http_build_query($this->message);
+
+
+        $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
+        fwrite($myfile, $string);
+        fclose($myfile);
+
+        file_get_contents($string);
     }
 }
 
