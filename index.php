@@ -4,6 +4,12 @@ require "./vendor/autoload.php";
 
 use TelegramBot\Classes\Telegram;
 
+
+$myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
+$txt = 'ffffff'."\n";
+fwrite($myfile, $txt);
+fclose($myfile);
+
 try {
     $telegram = new Telegram("1997963802:AAHnNRQtNKdmdtquiHtPjeBzKkC2xCCAQzE");
     $telegram->getUpdate();
