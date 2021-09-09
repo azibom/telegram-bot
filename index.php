@@ -1,8 +1,8 @@
 <?php
 
-require "vendor/autoload.php";
+require "./vendor/autoload.php";
 
-use Classes\Telegram;
+use TelegramBot\Classes\Telegram;
 
 $telegram = new Telegram("1997963802:AAHnNRQtNKdmdtquiHtPjeBzKkC2xCCAQzE");
 $telegram->getUpdate();

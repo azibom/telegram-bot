@@ -6,5 +6,9 @@
             "email": "mrsh13610@gmail.com"
         }
     ],
-    "require": {}
+    "require": {},
+    "autoload": {
+        "psr-4": {"TelegramBot\\": "src/"}
+    }
+
 }

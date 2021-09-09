@@ -1,6 +1,6 @@
 <?php
 
-namespace Classes;
+namespace TelegramBot\Classes;
 
 class Telegram {
 
