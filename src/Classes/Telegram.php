@@ -21,7 +21,7 @@ class Telegram {
         $chatID = null;
         $text   = null;
 
-        if ($this->content == null && isset($this->content["message"])) {
+        if ($this->content != null && isset($this->content["message"])) {
             $message = $this->content["message"];
             
             $chatID = $message["chat"]["id"];
