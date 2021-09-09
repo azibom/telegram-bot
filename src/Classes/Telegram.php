@@ -37,7 +37,7 @@ class Telegram {
     public function sendMessage($chatID, $text)
     {
         $args = array(
-            "chatID" => $chatID,
+            "chat_id" => $chatID,
             "text" => $text,
         );
         return $this->botUrl."sendMessage?".http_build_query($args);
