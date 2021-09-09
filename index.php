@@ -4,14 +4,19 @@ require "./vendor/autoload.php";
 
 use TelegramBot\Classes\Telegram;
 
+$contents = file_get_contents("php://input");
 
 $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
 $txt = 'ffffff'."\n";
 fwrite($myfile, $txt);
 fclose($myfile);
 
+$myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
+$txt = $contents;
+fwrite($myfile, $txt);
+fclose($myfile);
+
 try {
-    $contents = file_get_contents("php://input");
     $telegram = new Telegram("1997963802:AAHnNRQtNKdmdtquiHtPjeBzKkC2xCCAQzE",$contents );
     $message = $telegram->getMessage();
     $asdf = $telegram->sendMessage($message['chatID'], $message['text']);
