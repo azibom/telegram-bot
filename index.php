@@ -4,36 +4,11 @@ require "./vendor/autoload.php";
 
 use TelegramBot\Classes\Telegram;
 
-$contents = file_get_contents("php://input");
-
-$myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
-$txt = 'ffffff'."\n";
-fwrite($myfile, $txt);
-fclose($myfile);
-
-$myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
-$txt = $contents;
-fwrite($myfile, $txt);
-fclose($myfile);
-
 try {
-    $telegram = new Telegram("1997963802:AAHnNRQtNKdmdtquiHtPjeBzKkC2xCCAQzE",$contents );
+    $telegram = new Telegram("1997963802:AAHnNRQtNKdmdtquiHtPjeBzKkC2xCCAQzE");
+    $telegram->getUpdate();
     $message = $telegram->getMessage();
-
-    $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
-    $txt = json_encode($message);
-    fwrite($myfile, $txt);
-    fclose($myfile);
-
-
-    $asdf = $telegram->sendMessage($message['chatID'], $message['text']);
-
-    $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
-    fwrite($myfile, $asdf);
-    fclose($myfile);
-
-    file_get_contents($asdf);
-
+    $telegram->sendMessage($message['chatID'], $message['text']);
 } catch (Exception $e) {
     $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
     $txt = 'Caught exception : '.$e->getMessage()."\n";
