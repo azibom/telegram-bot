@@ -63,6 +63,17 @@ class Telegram {
         return $this;
     }
 
+    public function addKeyboard($keyboard)
+    {
+        $inlineKeyboard = array(
+            "keyboard" => $keyboard
+        );
+
+        $this->message["reply_markup"] = json_encode($inlineKeyboard);
+
+        return $this;
+    }
+
     public function sendMessage()
     {
         $string = $this->botUrl."sendMessage?".http_build_query($this->message);
