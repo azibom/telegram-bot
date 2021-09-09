@@ -14,7 +14,14 @@ try {
     $contents = file_get_contents("php://input");
     $telegram = new Telegram("1997963802:AAHnNRQtNKdmdtquiHtPjeBzKkC2xCCAQzE",$contents );
     $message = $telegram->getMessage();
-    $telegram->sendMessage($message['chatID'], $message['text']);
+    $asdf = $telegram->sendMessage($message['chatID'], $message['text']);
+
+    $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
+    fwrite($myfile, $asdf);
+    fclose($myfile);
+
+    file_get_contents($asdf);
+
 } catch (Exception $e) {
     $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
     $txt = 'Caught exception : '.$e->getMessage()."\n";

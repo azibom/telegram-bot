@@ -40,8 +40,7 @@ class Telegram {
             "chatID" => $chatID,
             "text" => $text,
         );
-
-        file_get_contents($this->botUrl."sendMessage?".http_build_query($args));
+        return $this->botUrl."sendMessage?".http_build_query($args);
     }
 }
 
