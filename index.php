@@ -17,6 +17,15 @@ try {
             array("text" => "3", "callback_data" => "myCallbackData"),
             array("text" => "4", "callback_data" => "myCallbackData")
         ),
+    ))->addInlineKeyboard(array(
+        array(
+            array("text" => "1", "callback_data" => "myCallbackData"),
+            array("text" => "2", "callback_data" => "myCallbackData")
+        ),
+        array(
+            array("text" => "3", "callback_data" => "myCallbackData"),
+            array("text" => "4", "callback_data" => "myCallbackData")
+        ),
     ));
     $telegram->sendMessage();
 
