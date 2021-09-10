@@ -29,17 +29,17 @@ class Telegram {
         $inputMessage = $this->getMessage();
         $searchResult = $this->searchInMenu($inputMessage['text'], $this->menu);
         if ($searchResult == null) {
-            $this->setMessage($inputMessage['text'], self::NOT_FOUND);
+            $this->setMessage($inputMessage['chatID'], self::NOT_FOUND);
         } elseif (is_array($searchResult)) {
             $array = [];
             foreach ($searchResult as $key => $value) {
                 $array[] = array("text" => $key);
             }
-            $this->setMessage($inputMessage['text'], self::SELECT_ONE_ITEM)->addKeyboard(array(
+            $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard(array(
                 $array,
             ));
         } else {
-            $this->setMessage($inputMessage['text'], $searchResult);
+            $this->setMessage($inputMessage['chatID'], $searchResult);
         }
     }
 
