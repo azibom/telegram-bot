@@ -12,12 +12,15 @@ fclose($myfile);
 try {
     $telegram = new Telegram("1997963802:AAHnNRQtNKdmdtquiHtPjeBzKkC2xCCAQzE");
     $telegram->addMenu([
-        "news" => [
-            "HI1" => "SAMPLE1",
-            "HI2" => "SAMPLE2",
-            "HI3" => "SAMPLE3",
+        "درباره ی گربه ها" => [
+            "غذای گربه ها" => "غذای گربه ها خوب است",
+            "خواب گربه ها" => "خواب گربه باید مناسب باشد",
         ],
-        "aboutUs" => "hi I am a bot"
+        "فروشگاه گربه" => [
+            "فندق" => "فندق گربه ی زیبایی است",
+            "قصه" => "قصه برای فروش نیست :|",
+        ],
+        "aboutUs" => "hi I gurbe forush bot :)))"
     ]);
 
     $telegram->getUpdate();
