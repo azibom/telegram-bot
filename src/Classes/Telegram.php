@@ -41,7 +41,7 @@ class Telegram {
             }
 
             $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard(array(
-                $array,
+                [$array],
             ));
         } else {
             $searchResult = $this->searchInMenu($inputMessage['text'], $this->menu);
