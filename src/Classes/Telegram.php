@@ -7,6 +7,8 @@ class Telegram {
     CONST BASE_BOT_URL = "https://api.telegram.org/bot";
     CONST NOT_FOUND = "دستور مورد نظر پیدا نشد";
     CONST SELECT_ONE_ITEM = "لطفا یک دستور را انتخاب کنید";
+    CONST HOME = "منو اصلی";
+    
     private $botToken;
     private $botUrl;
     private $content = null;
@@ -32,25 +34,43 @@ class Telegram {
         fwrite($myfile, json_encode($inputMessage));
         fclose($myfile);
 
-        $searchResult = $this->searchInMenu($inputMessage['text'], $this->menu);
-        if ($searchResult == null) {
+        if ($inputMessage['text'] == self::HOME) {
+            $array = [];
             foreach ($this->menu as $key => $value) {
                 $array[] = array("text" => $key);
             }
-            $this->setMessage($inputMessage['chatID'], self::NOT_FOUND)->addKeyboard(array(
-                $array,
-            ));
-        } elseif (is_array($searchResult)) {
-            $array = [];
-            foreach ($searchResult as $key => $value) {
-                $array[] = array("text" => $key);
-            }
+
             $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard(array(
                 $array,
             ));
         } else {
-            $this->setMessage($inputMessage['chatID'], $searchResult);
+            $searchResult = $this->searchInMenu($inputMessage['text'], $this->menu);
+            if ($searchResult == null) {
+                foreach ($this->menu as $key => $value) {
+                    $array[] = array("text" => $key);
+                }
+                $array[] = array("text" => self::HOME);
+    
+                $this->setMessage($inputMessage['chatID'], self::NOT_FOUND)->addKeyboard(array(
+                    $array,
+                ));
+            } elseif (is_array($searchResult)) {
+                $array = [];
+                foreach ($searchResult as $key => $value) {
+                    $array[] = array("text" => $key);
+                }
+                $array[] = array("text" => self::HOME);
+    
+    
+                $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard(array(
+                    $array,
+                ));
+            } else {
+                $this->setMessage($inputMessage['chatID'], $searchResult);
+            }
         }
+
+
     }
 
     public function searchInMenu($input, $menu)

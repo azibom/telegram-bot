@@ -13,9 +13,9 @@ try {
     $telegram = new Telegram("1997963802:AAHnNRQtNKdmdtquiHtPjeBzKkC2xCCAQzE");
     $telegram->addMenu([
         "news" => [
-            "HI1" => "SAMPLE",
-            "HI2" => "SAMPLE",
-            "HI3" => "SAMPLE",
+            "HI1" => "SAMPLE1",
+            "HI2" => "SAMPLE2",
+            "HI3" => "SAMPLE3",
         ],
         "aboutUs" => "hi I am a bot"
     ]);
