@@ -4,6 +4,11 @@ require "./vendor/autoload.php";
 
 use TelegramBot\Classes\Telegram;
 
+
+$myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
+fwrite($myfile, 'we are here 1' . PHP_EOL);
+fclose($myfile);
+
 try {
     $telegram = new Telegram("1997963802:AAHnNRQtNKdmdtquiHtPjeBzKkC2xCCAQzE");
     $telegram->addMenu([

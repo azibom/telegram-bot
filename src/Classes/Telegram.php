@@ -71,6 +71,11 @@ class Telegram {
         $this->content = json_decode($contents, true);
         
         return $this->content;
+
+        $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
+        fwrite($myfile, 'we are here 2' . PHP_EOL);
+        fwrite($myfile, json_encode($this->content) . PHP_EOL);
+        fclose($myfile);
     }
 
     public function getMessage()
@@ -129,7 +134,14 @@ class Telegram {
 
 
         $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
-        fwrite($myfile, $string);
+        fwrite($myfile, 'we are here 3' . PHP_EOL);
+        fwrite($myfile, json_encode($this->message) . PHP_EOL);
+        fclose($myfile);
+
+
+        $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
+        fwrite($myfile, 'we are here 4' . PHP_EOL);
+        fwrite($myfile, json_encode($string) . PHP_EOL);
         fclose($myfile);
 
         file_get_contents($string);
