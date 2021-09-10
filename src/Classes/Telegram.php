@@ -27,6 +27,11 @@ class Telegram {
     public function setAnswer()
     {
         $inputMessage = $this->getMessage();
+
+        $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
+        fwrite($myfile, json_encode($inputMessage));
+        fclose($myfile);
+
         $searchResult = $this->searchInMenu($inputMessage['text'], $this->menu);
         if ($searchResult == null) {
             $this->setMessage($inputMessage['chatID'], self::NOT_FOUND);
