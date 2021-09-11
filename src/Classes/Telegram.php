@@ -41,7 +41,9 @@ class Telegram {
             }
 
             $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard(array(
-                [$array],
+                array(
+                    $array,
+                ),
             ));
         } else {
             $searchResult = $this->searchInMenu($inputMessage['text'], $this->menu);
@@ -52,7 +54,9 @@ class Telegram {
                 $array[] = array("text" => self::HOME);
     
                 $this->setMessage($inputMessage['chatID'], self::NOT_FOUND)->addKeyboard(array(
-                    [$array],
+                    array(
+                        $array,
+                    ),
                 ));
             } elseif (is_array($searchResult)) {
                 $array = [];
@@ -63,7 +67,9 @@ class Telegram {
     
     
                 $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard(array(
-                    [$array],
+                    array(
+                        $array,
+                    ),
                 ));
             } else {
                 $this->setMessage($inputMessage['chatID'], $searchResult);
