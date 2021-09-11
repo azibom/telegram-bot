@@ -37,34 +37,54 @@ class Telegram {
         if ($inputMessage['text'] == self::HOME) {
             $array = [];
             foreach ($this->menu as $key => $value) {
-                $array[] = array(array("text" => $key));
+                $array[] = array("text" => $key);
             }
 
             $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard(array(
-                $array,
+                array(
+                    array("text" => "1"),
+                    array("text" => "2")
+                ),
+                array(
+                    array("text" => "3"),
+                    array("text" => "4")
+                ),
             ));
         } else {
             $searchResult = $this->searchInMenu($inputMessage['text'], $this->menu);
             if ($searchResult == null) {
                 foreach ($this->menu as $key => $value) {
-                    $array[] = array(array("text" => $key));
-
+                    $array[] = array("text" => $key);
                 }
-                $array[] = array(array("text" => self::HOME));
+                // $array[] = array("text" => self::HOME);
     
                 $this->setMessage($inputMessage['chatID'], self::NOT_FOUND)->addKeyboard(array(
-                    $array,
+                    array(
+                        array("text" => "1"),
+                        array("text" => "2")
+                    ),
+                    array(
+                        array("text" => "3"),
+                        array("text" => "4")
+                    ),
                 ));
             } elseif (is_array($searchResult)) {
                 $array = [];
                 foreach ($searchResult as $key => $value) {
-                    $array[] = array(array("text" => $key));
-
+                    $array[] = array("text" => $key);
                 }
-                $array[] = array(array("text" => self::HOME));
+                // $array[] = array("text" => self::HOME);
+    
     
                 $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard(array(
-                    $array,
+                    array(
+                        array("text" => "1"),
+                        array("text" => "2")
+                    ),
+                    array(
+                        array("text" => "3"),
+                        array("text" => "4")
+                    ),
                 ));
             } else {
                 $this->setMessage($inputMessage['chatID'], $searchResult);
