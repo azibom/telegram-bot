@@ -59,9 +59,9 @@ class Telegram {
                 }
                 $array[] = array(array("text" => self::HOME));
     
-                $this->setMessage($inputMessage['chatID'], self::NOT_FOUND)->addKeyboard(array(
+                $this->setMessage($inputMessage['chatID'], self::NOT_FOUND)->addKeyboard(
                     $array
-                ));
+                );
             } elseif (is_array($searchResult)) {
                 $array = [];
                 foreach ($searchResult as $key => $value) {
