@@ -48,7 +48,6 @@ class Telegram {
                 foreach ($this->menu as $key => $value) {
                     $array[] = array(array("text" => $key));
                 }
-                $array[] = array(array("text" => self::HOME));
     
                 $this->setMessage($inputMessage['chatID'], self::NOT_FOUND)->addKeyboard(
                     $array
