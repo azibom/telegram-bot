@@ -92,11 +92,6 @@ class Telegram {
         $this->content = json_decode($contents, true);
         
         return $this->content;
-
-        $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
-        fwrite($myfile, 'we are here 2' . PHP_EOL);
-        fwrite($myfile, json_encode($this->content) . PHP_EOL);
-        fclose($myfile);
     }
 
     public function getMessage()
@@ -109,6 +104,10 @@ class Telegram {
             
             $chatID = $message["chat"]["id"];
             $text   = $message["text"];
+        }
+
+        if ($text == "/start") {
+            
         }
 
         return [

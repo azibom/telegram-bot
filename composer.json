@@ -6,7 +6,11 @@
             "email": "mrsh13610@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "doctrine/orm": "^2.9",
+        "irap/autoloader": "^2.0",
+        "symfony/cache": "^5.3"
+    },
     "autoload": {
         "psr-4": {"TelegramBot\\": "src/"}
     }
