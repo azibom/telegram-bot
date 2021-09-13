@@ -23,7 +23,15 @@ try {
         "درباره ی ما" => "ما گوربه میفروشیم"
     ]);
 
-    $telegram->getUpdate();
+    $res = $telegram->getUpdate();
+
+    $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
+    fwrite($myfile, 'weeeeeeeeeeeeeeeeeeeeeeeeeeee' . PHP_EOL);
+    fwrite($myfile, json_encode($res) . PHP_EOL);
+    fwrite($myfile, 'weeeeeeeeeeeeeeeeeeeeeeeeeeee' . PHP_EOL);
+
+    fclose($myfile);
+
     $telegram->setAnswer();
     $telegram->sendMessage();
 
