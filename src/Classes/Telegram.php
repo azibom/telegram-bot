@@ -30,10 +30,6 @@ class Telegram {
     {
         $inputMessage = $this->getMessage();
 
-        $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
-        fwrite($myfile, json_encode($inputMessage));
-        fclose($myfile);
-
         if ($inputMessage['text'] == self::HOME) {
             $array = [];
             foreach ($this->menu as $key => $value) {
@@ -91,6 +87,11 @@ class Telegram {
         $contents = file_get_contents("php://input");
         $this->content = json_decode($contents, true);
         
+
+        $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
+        fwrite($myfile, json_encode($contents));
+        fclose($myfile);
+
         return $this->content;
     }
 
