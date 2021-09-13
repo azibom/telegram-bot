@@ -89,7 +89,9 @@ class Telegram {
         
 
         $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
-        fwrite($myfile, json_encode($contents));
+        fwrite($myfile, "______________________________" . PHP_EOL);
+        fwrite($myfile, $contents);
+        fwrite($myfile, "______________________________" . PHP_EOL);
         fclose($myfile);
 
         return $this->content;
