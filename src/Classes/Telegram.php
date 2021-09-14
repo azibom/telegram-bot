@@ -185,6 +185,10 @@ class Telegram {
                 $this->user = $res[0];
                 $this->userBack = $res[1];
 
+                if ($text == self::BACK) {
+                    $this->repo->updateUser($this->user, null, $this->userBack);
+                }
+
             } catch (\Throwable $th) {
 
                 $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
