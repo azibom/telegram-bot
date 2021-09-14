@@ -127,14 +127,19 @@ class Telegram {
 
     public function searchInMenuFindParent($input, $menu)
     {
-        foreach ($menu as $key => $value) {
-            if ($key == $input) {
-                return $menu;
-            }
-            if (is_array($value)) {
-                $searchInMenuResult = $this->searchInMenuFindParent($input, $value);
-                if ($searchInMenuResult != null) {
-                    return $searchInMenuResult;
+        foreach ($menu as $key => $el) {
+            if (is_array($el)) {
+                foreach ($el as $key2 => $value) {
+                    if ($key2 == $input) {
+                        return $key;
+                    }
+
+                    if (is_array($value)) {
+                        $searchInMenuResult = $this->searchInMenuFindParent($input, $value);
+                        if ($searchInMenuResult != null) {
+                            return $searchInMenuResult;
+                        }
+                    }
                 }
             }
         }
