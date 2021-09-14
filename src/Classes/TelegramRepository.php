@@ -37,6 +37,8 @@ class TelegramRepository {
         $user = new User($name, $chatId, $currentMenuName);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+
+        return $user;
     }
 
     public function updateUser(User $user, $name = null, $currentMenuName = null)
