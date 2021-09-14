@@ -186,7 +186,7 @@ class Telegram {
                 $this->userBack = $res[1];
 
                 if ($text == self::BACK) {
-                    $this->repo->updateUser($this->user, null, $this->userBack);
+                    $this->repo->updateUser($this->user, null, $this->searchInMenuFindParent($this->userBack, $this->menu));
                 }
 
             } catch (\Throwable $th) {
