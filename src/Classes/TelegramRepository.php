@@ -61,7 +61,7 @@ class TelegramRepository {
             $user = $this->addNewUser($name, $chatId, $currentMenuName);
             return [$user, null];
         } else {
-            $back = $user->currentMenuName;
+            $back = $user->getCurrentMenuName();
             $user = $this->updateUser($user, $name, $chatId, $currentMenuName);
             return [$user, $back];
         }
