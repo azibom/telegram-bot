@@ -37,7 +37,7 @@ class Telegram {
 
         try {
             $inputMessage = $this->getMessage();
-            $this->user = $this->repo->updateUser($this->user, null, $inputMessage['text']);
+            $this->user = $this->repo->updateUser($this->user, $inputMessage['name'], $inputMessage['chatID'], $inputMessage['text']);
         } catch (\Throwable $th) {
             $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
             fwrite($myfile, $th->getMessage().'______________fuckkkkkkkkkkkkkkkkkkkkk________________2error' . PHP_EOL);
@@ -137,6 +137,7 @@ class Telegram {
 
         return [
             "chatID" => $chatID, 
+            "name" => $chatID, 
             "text" => $text, 
         ];
     }
