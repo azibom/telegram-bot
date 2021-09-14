@@ -14,10 +14,13 @@ class Telegram {
     private $content = null;
     private $message = null;
     private $menu    = [];
+    private $repo;
+    private $user;
 
-    public function __construct($botToken)
+    public function __construct($botToken, $repo)
     {
         $this->botToken = $botToken;
+        $this->repo = $repo;
         $this->botUrl = self::BASE_BOT_URL . $botToken . "/";
     }
 
@@ -29,6 +32,7 @@ class Telegram {
     public function setAnswer()
     {
         $inputMessage = $this->getMessage();
+        $this->user = $this->repo->updateUser($this->user, null, $inputMessage['text']);
 
         if ($inputMessage['text'] == self::HOME) {
             $array = [];
@@ -106,7 +110,10 @@ class Telegram {
             $message = $this->content["message"];
             
             $chatID = $message["chat"]["id"];
+            $name = $message["chat"]["first_name"];
             $text   = $message["text"];
+
+            $this->user = $this->repo->getUser($name, $chatID);
         }
 
         if ($text == "/start") {
