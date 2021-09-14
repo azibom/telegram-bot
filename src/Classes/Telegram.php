@@ -175,7 +175,7 @@ class Telegram {
             $text   = $message["text"];
             try {
 
-                $searchResultd = $this->searchInMenuFindParent($text, $this->menu);
+                $searchResultd = $this->searchInMenu($text, $this->menu);
                 if (is_array($searchResultd)) {
                     $res = $this->repo->getUser($name, $chatID, $text);
                 } else {
