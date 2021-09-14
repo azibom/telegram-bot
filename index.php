@@ -21,6 +21,13 @@ try {
             "فندق" => "فندق گربه ی زیبایی است",
             "قصه" => "قصه برای فروش نیست :|",
         ],
+        "a" => [
+            "b" => "c",
+            "d" => [
+                "gg" => "1",
+                "gg3" => "14",
+            ],
+        ],
         "درباره ی ما" => "ما گوربه میفروشیم"
     ]);
 
@@ -35,20 +42,6 @@ try {
 
     $telegram->setAnswer();
     $telegram->sendMessage();
-
-    // $message = $telegram->getMessage();
-    // $telegram->setMessage($message['chatID'], $message['text'])->addKeyboard(array(
-    //     array(
-    //         array("text" => "1"),
-    //         array("text" => "2")
-    //     ),
-    //     array(
-    //         array("text" => "3"),
-    //         array("text" => "4")
-    //     ),
-    // ));
-    // $telegram->sendMessage();
-
 } catch (Exception $e) {
     $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
     $txt = 'Caught exception : '.$e->getMessage()."\n";
