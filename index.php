@@ -5,14 +5,9 @@ require "./vendor/autoload.php";
 use TelegramBot\Classes\Telegram;
 use TelegramBot\Classes\TelegramRepository;
 
-
-echo 'Current script owner: ' . get_current_user();
-
-
 $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
-fwrite($myfile, 'we are here 1' . PHP_EOL);
+fwrite($myfile, 'we are here 1' .get_current_user(). PHP_EOL);
 fclose($myfile);
-
 
 try {
     $telegramRepository = new TelegramRepository();
