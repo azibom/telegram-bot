@@ -31,8 +31,16 @@ class Telegram {
 
     public function setAnswer()
     {
+        $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
+        fwrite($myfile, "______________fuckkkkkkkkkkkkkkkkkkkkk________________1" . PHP_EOL);
+        fclose($myfile);
+
         $inputMessage = $this->getMessage();
         $this->user = $this->repo->updateUser($this->user, null, $inputMessage['text']);
+
+        $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
+        fwrite($myfile, "______________fuckkkkkkkkkkkkkkkkkkkkk________________2" . PHP_EOL);
+        fclose($myfile);
 
         if ($inputMessage['text'] == self::HOME) {
             $array = [];
