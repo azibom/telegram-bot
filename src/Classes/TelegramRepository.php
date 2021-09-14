@@ -22,12 +22,12 @@ class TelegramRepository {
         $this->qb = $this->entityManager->createQueryBuilder();
     }
 
-    public function getUserByChatId(int $id)
+    public function getUserByChatId($chatId)
     {
         $this->qb->select('U')
             ->from('User', 'U')
-            ->where('U.id = :id')
-            ->setParameter(':id', $id);
+            ->where('U.chatId = :chatId')
+            ->setParameter(':chatId', $chatId);
             
         return $this->qb->getQuery()->getOneOrNullResult();
     }
