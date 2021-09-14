@@ -62,7 +62,7 @@ class TelegramRepository {
             return [$user, null];
         } else {
             $back = $user->getCurrentMenuName();
-            $user = $this->updateUser($user, $name, $chatId, $currentMenuName);
+            $user = $this->updateUser($user, $name, $currentMenuName);
             return [$user, $back];
         }
 
