@@ -59,10 +59,12 @@ class TelegramRepository {
         $user = $this->getUserByChatId($chatId);
         if ($user == null) {
             $user = $this->addNewUser($name, $chatId, $currentMenuName);
+            return [$user, null];
         } else {
+            $back = $user->currentMenuName;
             $user = $this->updateUser($user, $name, $chatId, $currentMenuName);
+            return [$user, $back];
         }
 
-        return $user;
     }
 }

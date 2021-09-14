@@ -8,6 +8,7 @@ class Telegram {
     CONST NOT_FOUND = "دستور مورد نظر پیدا نشد";
     CONST SELECT_ONE_ITEM = "لطفا یک دستور را انتخاب کنید";
     CONST HOME = "منو اصلی";
+    CONST BACK = "بازگشت";
     
     private $botToken;
     private $botUrl;
@@ -16,6 +17,7 @@ class Telegram {
     private $menu    = [];
     private $repo;
     private $user;
+    private $userBack = null;
 
     public function __construct($botToken, $repo)
     {
@@ -40,6 +42,43 @@ class Telegram {
             }
 
             $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard($array);
+        } elseif($inputMessage['text'] == self::BACK) {
+            $searchResultd = $this->searchInMenuFindParent($this->userBack, $this->menu);
+            if ($searchResultd == null) {
+                $array = [];
+                foreach ($this->menu as $key => $value) {
+                    $array[] = array(array("text" => $key));
+                }
+    
+                $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard($array);
+            } else {
+                $searchResult = $this->searchInMenu($searchResultd, $this->menu);
+                if ($searchResult == null) {
+                    $array = [];
+                    foreach ($this->menu as $key => $value) {
+                        $array[] = array(array("text" => $key));
+                    }
+        
+                    $this->setMessage($inputMessage['chatID'], self::NOT_FOUND)->addKeyboard(
+                        $array
+                    );
+                } elseif (is_array($searchResult)) {
+                    $array = [];
+                    foreach ($searchResult as $key => $value) {
+                        $array[] = array(array("text" => $key));
+                    }
+                    $array[] = array(array("text" => self::HOME));
+                    $array[] = array(array("text" => self::BACK));
+        
+        
+                    $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard($array);
+                } else {
+                    $this->setMessage($inputMessage['chatID'], $searchResult);
+                }
+
+
+
+            }
         } else {
             $searchResult = $this->searchInMenu($inputMessage['text'], $this->menu);
             if ($searchResult == null) {
@@ -57,6 +96,7 @@ class Telegram {
                     $array[] = array(array("text" => $key));
                 }
                 $array[] = array(array("text" => self::HOME));
+                $array[] = array(array("text" => self::BACK));
     
     
                 $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard($array);
@@ -76,6 +116,23 @@ class Telegram {
             }
             if (is_array($value)) {
                 $searchInMenuResult = $this->searchInMenu($input, $value);
+                if ($searchInMenuResult != null) {
+                    return $searchInMenuResult;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public function searchInMenuFindParent($input, $menu)
+    {
+        foreach ($menu as $key => $value) {
+            if ($key == $input) {
+                return $menu;
+            }
+            if (is_array($value)) {
+                $searchInMenuResult = $this->searchInMenuFindParent($input, $value);
                 if ($searchInMenuResult != null) {
                     return $searchInMenuResult;
                 }
@@ -112,7 +169,10 @@ class Telegram {
             $name = $message["chat"]["first_name"];
             $text   = $message["text"];
             try {
-                $this->user = $this->repo->getUser($name, $chatID, $text);
+                $res = $this->repo->getUser($name, $chatID, $text);
+
+                $this->user = $res[0];
+                $this->userBack = $res[1];
 
             } catch (\Throwable $th) {
 
