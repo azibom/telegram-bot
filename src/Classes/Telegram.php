@@ -31,23 +31,7 @@ class Telegram {
 
     public function setAnswer()
     {
-        $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
-        fwrite($myfile, "______________fuckkkkkkkkkkkkkkkkkkkkk________________1" . PHP_EOL);
-        fclose($myfile);
-
-        try {
-            $inputMessage = $this->getMessage();
-            $this->user = $this->repo->updateUser($this->user, $inputMessage['name'], $inputMessage['chatID'], $inputMessage['text']);
-        } catch (\Throwable $th) {
-            $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
-            fwrite($myfile, $th->getMessage().'______________fuckkkkkkkkkkkkkkkkkkkkk________________2error' . PHP_EOL);
-            fclose($myfile);
-        }
-
-
-        $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
-        fwrite($myfile, "______________fuckkkkkkkkkkkkkkkkkkkkk________________2" . PHP_EOL);
-        fclose($myfile);
+        $inputMessage = $this->getMessage();
 
         if ($inputMessage['text'] == self::HOME) {
             $array = [];
@@ -127,8 +111,15 @@ class Telegram {
             $chatID = $message["chat"]["id"];
             $name = $message["chat"]["first_name"];
             $text   = $message["text"];
+            try {
+                $this->user = $this->repo->getUser($name, $chatID, $text);
 
-            $this->user = $this->repo->getUser($name, $chatID);
+            } catch (\Throwable $th) {
+
+                $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
+                fwrite($myfile, "tttttttttttttttttttttt".$th->getMessage() . PHP_EOL);
+                fclose($myfile);
+            }
         }
 
         if ($text == "/start") {
