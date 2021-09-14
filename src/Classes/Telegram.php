@@ -35,8 +35,15 @@ class Telegram {
         fwrite($myfile, "______________fuckkkkkkkkkkkkkkkkkkkkk________________1" . PHP_EOL);
         fclose($myfile);
 
-        $inputMessage = $this->getMessage();
-        $this->user = $this->repo->updateUser($this->user, null, $inputMessage['text']);
+        try {
+            $inputMessage = $this->getMessage();
+            $this->user = $this->repo->updateUser($this->user, null, $inputMessage['text']);
+        } catch (\Throwable $th) {
+            $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
+            fwrite($myfile, $th->getMessage().'______________fuckkkkkkkkkkkkkkkkkkkkk________________2error' . PHP_EOL);
+            fclose($myfile);
+        }
+
 
         $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
         fwrite($myfile, "______________fuckkkkkkkkkkkkkkkkkkkkk________________2" . PHP_EOL);
