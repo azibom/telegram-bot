@@ -67,8 +67,8 @@ class Telegram {
                     foreach ($searchResult as $key => $value) {
                         $array[] = array(array("text" => $key));
                     }
-                    $array[] = array(array("text" => self::HOME));
-                    $array[] = array(array("text" => self::BACK));
+                    $array[] = array(array("text" => self::BACK), array("text" => self::HOME));
+                    // $array[] = array();
         
         
                     $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard($array);
@@ -95,8 +95,8 @@ class Telegram {
                 foreach ($searchResult as $key => $value) {
                     $array[] = array(array("text" => $key));
                 }
-                $array[] = array(array("text" => self::HOME));
-                $array[] = array(array("text" => self::BACK));
+                $array[] = array(array("text" => self::BACK), array("text" => self::HOME));
+
     
     
                 $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard($array);
