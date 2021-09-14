@@ -174,7 +174,13 @@ class Telegram {
             $name = $message["chat"]["first_name"];
             $text   = $message["text"];
             try {
-                $res = $this->repo->getUser($name, $chatID, $text);
+
+                $searchResultd = $this->searchInMenuFindParent($text, $this->menu);
+                if (is_array($searchResultd)) {
+                    $res = $this->repo->getUser($name, $chatID, $text);
+                } else {
+                    $res = $this->repo->getUser($name, $chatID, null);
+                }
 
                 $this->user = $res[0];
                 $this->userBack = $res[1];
