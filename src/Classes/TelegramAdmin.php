@@ -25,6 +25,6 @@ class TelegramAdmin {
 
     public function checkUserIsAdmin($user)
     {
-        return $user->getIsAdmin() == "yes";
+        return $user->getIsAdmin() === "yes";
     }
 }

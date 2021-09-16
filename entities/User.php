@@ -38,7 +38,7 @@ class User
     public function getChatId() : string { return $this->chatId; }
     public function getCurrentMenuName() : string { return $this->currentMenuName; }
     public function getTelegramId() : string { return $this->telegramId; }
-    public function getIsAdmin() : string { return $this->isAdmin; }
+    public function getIsAdmin() { return $this->isAdmin; }
 
     public function setName(string $name) {$this->name = $name;}
     public function setChatId(string $chatId) {$this->chatId = $chatId;}
