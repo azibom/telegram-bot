@@ -221,6 +221,7 @@ class Telegram {
                     $this->message[] = array(
                         "chat_id" => $chatID,
                         "photo" => $value['src'],
+                        "caption" => isset($value['caption']) ? $value['caption'] : null 
                     );
                 }
             }
