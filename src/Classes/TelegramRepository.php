@@ -69,6 +69,8 @@ class TelegramRepository {
 
     public function updateUser(User $user, $name = null, $currentMenuName = null, $isAdmin = null)
     {
+        $user = $this->entityManager->getRepository("User")->find($user->getId());
+
         if ($name != null) {
             $user->setName($name);
         }
@@ -80,7 +82,7 @@ class TelegramRepository {
         if ($isAdmin != null) {
             $user->setIsAdmin($isAdmin);
         }
-        // $this->entityManager->persist($user);
+
         $this->entityManager->flush();
         return $user;
     }
