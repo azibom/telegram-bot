@@ -29,7 +29,7 @@ class Telegram {
     private $user;
     private $userBack = null;
     private $logger = null;
-    private $adminKeyboard = null;
+    private $adminKeyboard = [];
 
     public function __construct($botToken, $repo)
     {
@@ -303,7 +303,7 @@ class Telegram {
                 $queryInArray = $this->message[$i];
 
                 if ($this->keyboard && ($i + 1) == count($this->message)) {
-                    if (!is_null($this->adminKeyboard)) {
+                    if (!empty($this->adminKeyboard)) {
                         foreach ($this->adminKeyboard as $value) {
                             $this->keyboard[] = $value;
                         }
