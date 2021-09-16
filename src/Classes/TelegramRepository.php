@@ -80,7 +80,7 @@ class TelegramRepository {
         if ($isAdmin != null) {
             $user->setIsAdmin($isAdmin);
         }
-
+        $this->entityManager->persist($user);
         $this->entityManager->flush();
         return $user;
     }
