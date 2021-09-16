@@ -303,8 +303,10 @@ class Telegram {
                 $queryInArray = $this->message[$i];
 
                 if ($this->keyboard && ($i + 1) == count($this->message)) {
-                    if (!empty($this->adminKeyboard)) {
-                        $this->keyboard = array_merge($this->keyboard, $this->adminKeyboard);
+                    if (!is_null($this->adminKeyboard)) {
+                        foreach ($this->adminKeyboard as $value) {
+                            $this->keyboard[] = $value;
+                        }
                     }
                     $queryInArray['reply_markup'] = $this->keyboard;
                 }
