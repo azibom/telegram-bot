@@ -52,7 +52,7 @@ class Telegram {
         if ($DB) {
             $this->menu = json_decode($DB, true);
         } else {
-            $this->repo->addNewConfig("database", json_encode($this->menu));
+            $this->repo->addNewConfig("database", json_encode($menu));
             $this->menu = $menu;
         }
     }
