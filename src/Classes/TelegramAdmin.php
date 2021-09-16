@@ -21,8 +21,7 @@ class TelegramAdmin {
 
     public function setAdminFlag(User $user)
     {
-        $user->setIsAdmin("yes");
-        return $this->repo->updateUser($user);
+        return $this->repo->updateUser($user, null, null, "yes");
     }
 
     public function checkUserIsAdmin($user)

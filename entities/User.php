@@ -24,12 +24,13 @@ class User
     /** @Column(type="string", nullable=true) **/
     protected $currentMenuName;
 
-    public function __construct(string $name, string $chatId, string $currentMenuName, string $telegramId)
+    public function __construct(string $name, string $chatId, string $currentMenuName, string $telegramId, string $isAdmin)
     {
         $this->name = $name;
         $this->chatId = $chatId;
         $this->currentMenuName = $currentMenuName;
         $this->telegramId = $telegramId;
+        $this->isAdmin = $isAdmin;
     }
 
     # Accessors
