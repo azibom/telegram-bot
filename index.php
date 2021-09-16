@@ -29,7 +29,9 @@ $telegram->addMenu([
     ],
     "درباره ی ما" => "ما گوربه میفروشیم",
     "special" => $telegram->message([
-        ["type" => "text", "text" => "hi hi"]
+        ["type" => "text", "text" => "hi hi"],
+        ["type" => "text", "text" => "hi hi2"],
+        ["type" => "text", "text" => "hi hi3"],
     ])
 ]);
 
