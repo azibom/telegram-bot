@@ -47,9 +47,8 @@ class Telegram {
             $array[] = array(array("text" => $key));
         }
 
-        if (!$extraButton) {
+        if ($extraButton) {
             $array[] = $extraButton;
-
         }
 
         return $array;
