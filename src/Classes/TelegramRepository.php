@@ -58,7 +58,7 @@ class TelegramRepository {
         return $this->qb->getQuery()->getOneOrNullResult();
     }
 
-    public function addNewUser($name, $chatId, $currentMenuName)
+    public function addNewUser($name, $chatId, $currentMenuName = "")
     {
         $user = new User($name, $chatId, $currentMenuName, "");
         $this->entityManager->persist($user);
