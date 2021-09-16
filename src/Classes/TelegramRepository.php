@@ -29,7 +29,7 @@ class TelegramRepository {
             ->where('C.key = :key')
             ->setParameter(':key', $key);
             
-        return $this->qb->getQuery()->getOneOrNullResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     public function addNewConfig($key, $value)
@@ -55,7 +55,7 @@ class TelegramRepository {
             ->where('U.chatId = :chatId')
             ->setParameter(':chatId', $chatId);
             
-        return $this->qb->getQuery()->getOneOrNullResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     public function addNewUser($name, $chatId, $currentMenuName = "")
