@@ -209,6 +209,7 @@ class Telegram {
             }
         } catch (\Throwable $th) {
             $this->logger->error($th->getMessage());
+            $this->logger->error($th->getTraceAsString());
         }
     }
 
