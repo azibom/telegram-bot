@@ -48,12 +48,17 @@ class Telegram {
 
     public function addMenu($menu)
     {
-        $DB = $this->repo->getConfigByKey("database");
-        if ($DB) {
-            $this->menu = json_decode($DB, true);
-        } else {
-            $this->repo->addNewConfig("database", json_encode($menu));
-            $this->menu = $menu;
+        try {
+            $DB = $this->repo->getConfigByKey("database");
+            if ($DB) {
+                $this->menu = json_decode($DB, true);
+            } else {
+                $this->repo->addNewConfig("database", json_encode($menu));
+                $this->menu = $menu;
+            }
+        } catch (\Throwable $th) {
+            $this->logger->error($th->getMessage());
+            $this->logger->error($th->getTraceAsString());
         }
     }
 
