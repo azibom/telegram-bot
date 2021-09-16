@@ -30,6 +30,11 @@ class Telegram {
         $this->logger = getLogger();
     }
 
+    public function message($message)
+    {
+        return json_encode($message);
+    }
+
     public function addMenu($menu)
     {
         $this->menu = $menu;
