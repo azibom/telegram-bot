@@ -146,7 +146,7 @@ class Telegram {
     {
         $contents = file_get_contents("php://input");
         $this->content = json_decode($contents, true);
-        $this->logger->info("getUpdate content", $this->content);
+        $this->logger->info("getUpdate content", $this->content ?? []);
 
         return $this->content;
     }
@@ -187,16 +187,16 @@ class Telegram {
         $text   = null;
 
         if ($this->content != null && isset($this->content["message"])) {
-            $message = $this->content["message"];
-            $chatID  = $message["chat"]["id"];
+            $message = $this->content["message"]     ;
+            $chatID  = $message["chat"]["id"]        ;
             $name    = $message["chat"]["first_name"];
-            $text    = $message["text"];
+            $text    = $message["text"]              ;
         }
 
         return [
-            "chatID" => $chatID, 
-            "name" => $name, 
-            "text" => $text, 
+            "chatID" => $chatID ?? null, 
+            "name" => $name ?? null, 
+            "text" => $text ?? null, 
         ];
     }
 
