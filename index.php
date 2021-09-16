@@ -31,7 +31,7 @@ $telegram->addMenu([
     "special" => $telegram->message([
         ["type" => "text", "text" => "hi hi"],
         ["type" => "text", "text" => "hi hi2"],
-        ["type" => "image", "src" => "AgACAgQAAxkBAAIHw2FDOXwPXl_BHmCGT6Cedj-VAAHH3QACcbYxG9lAGVJMj4HHKaBVwAEAAwIAA3MAAyAE"],
+        ["type" => "image", "src" => "AQADcbYxG9lAGVJ4"],
     ])
 ]);
 
