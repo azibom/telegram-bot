@@ -77,8 +77,6 @@ class TelegramRepository {
             $user->setCurrentMenuName($currentMenuName);
         }
         $this->entityManager->flush();
-
-        $this->logger->info("we are here 3" . $user->getIsAdmin());
         return $user;
     }
 }
