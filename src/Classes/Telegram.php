@@ -52,6 +52,10 @@ class Telegram {
             $DB = $this->repo->getConfigByKey("database");
             if ($DB) {
                 $this->menu = json_decode($DB, true);
+
+                $result=array_diff($menu,$this->menu);
+                $this->logger->info(json_encode($result));
+
             } else {
                 $this->repo->addNewConfig("database", json_encode($menu));
                 $this->menu = $menu;
