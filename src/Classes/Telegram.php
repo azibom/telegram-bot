@@ -120,7 +120,9 @@ class Telegram {
                 $this->adminKeyboard[] = array(array("text" => self::DELETE_MENU), array("text" => self::DELETE_SUB_MENU));
                 $this->adminKeyboard[] = array(array("text" => self::ADD_CONTENT));
             } else {
+                $this->logger->info("we are here 1" . $inputMessage['text']);
                 if ($this->admin->checkPass($inputMessage['text'])) {
+                    $this->logger->info("we are here 2" . $inputMessage['text']);
                     $this->user = $this->admin->setAdminFlag($this->user);
                 }
             }
