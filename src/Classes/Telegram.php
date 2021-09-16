@@ -123,9 +123,9 @@ class Telegram {
                 $this->logger->info("we are here 1" . $inputMessage['text']);
                 if ($this->admin->checkPass($inputMessage['text'])) {
                     $this->logger->info("we are here 2" . $inputMessage['text']);
-                    $this->logger->info("we are here 5 " . $this->user->getId());
+                    $this->logger->info("we are here 5 " . $this->user->getIsAdmin());
                     $this->user = $this->admin->setAdminFlag($this->user);
-                    $this->logger->info("we are here 6 " . $this->user->getId());
+                    $this->logger->info("we are here 6 " . $this->user->getIsAdmin());
                 }
             }
 
