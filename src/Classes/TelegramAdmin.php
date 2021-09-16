@@ -2,6 +2,8 @@
 
 namespace TelegramBot\Classes;
 
+use User;
+
 class TelegramAdmin {
     private $rootPass;
     private $repo;
@@ -17,7 +19,7 @@ class TelegramAdmin {
         return $pass == $this->rootPass;
     }
 
-    public function setAdminFlag($user)
+    public function setAdminFlag(User $user)
     {
         $user->setIsAdmin("yes");
         return $this->repo->updateUser($user);
