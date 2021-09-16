@@ -14,7 +14,8 @@ class Telegram {
     private $botToken;
     private $botUrl;
     private $content = null;
-    private $message = null;
+    private $message = [];
+    private $keyboard = null;
     private $menu    = [];
     private $repo;
     private $user;
@@ -204,12 +205,26 @@ class Telegram {
         ];
     }
 
-    public function setMessage($chatID, $text)
+    public function setMessage($chatID, $message)
     {
-        $this->message = array(
-            "chat_id" => $chatID,
-            "text" => $text,
-        );
+        $messageInArray = json_decode($message, true);
+        
+        if (!empty($messageInArray)) {
+            foreach ($messageInArray as $value) {
+                $type = $value["type"];
+                if ($type == "text") {
+                    $this->message[] = array(
+                        "chat_id" => $chatID,
+                        "text" => $value['text'],
+                    );
+                }
+            }
+        } else {
+            $this->message[] = array(
+                "chat_id" => $chatID,
+                "text" => $message,
+            );
+        }
 
         return $this;
     }
@@ -220,8 +235,7 @@ class Telegram {
             "inline_keyboard" => $keyboard
         );
 
-        $this->message["reply_markup"] = json_encode($inlineKeyboard);
-
+        $this->keyboard = json_encode($inlineKeyboard);
         return $this;
     }
 
@@ -231,16 +245,23 @@ class Telegram {
             "keyboard" => $keyboard
         );
 
-        $this->message["reply_markup"] = json_encode($inlineKeyboard);
-
+        $this->keyboard = json_encode($inlineKeyboard);
         return $this;
     }
 
     public function sendMessage()
     {
-        $string = $this->botUrl."sendMessage?".http_build_query($this->message);
-        $this->logger->info($string);
-        file_get_contents($string);
+        for ($i=0; $i < count($this->message); $i++) { 
+            $queryInArray = $this->message[$i];
+
+            if ($this->keyboard && ($i + 1) == count($this->message)) {
+                $queryInArray['reply_markup'] = $this->keyboard;
+            }
+
+            $string = $this->botUrl."sendMessage?".http_build_query($queryInArray);
+            $this->logger->info($string);
+            file_get_contents($string);
+        }
     }
 }
 
