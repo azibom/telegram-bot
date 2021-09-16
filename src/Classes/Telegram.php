@@ -1,6 +1,7 @@
 <?php
 
 namespace TelegramBot\Classes;
+require_once(__DIR__ . '/../../logger.php');
 
 class Telegram {
 
@@ -18,12 +19,15 @@ class Telegram {
     private $repo;
     private $user;
     private $userBack = null;
+    private $logger = null;
 
     public function __construct($botToken, $repo)
     {
         $this->botToken = $botToken;
         $this->repo = $repo;
         $this->botUrl = self::BASE_BOT_URL . $botToken . "/";
+
+        $this->logger = getLogger();
     }
 
     public function addMenu($menu)
@@ -31,81 +35,72 @@ class Telegram {
         $this->menu = $menu;
     }
 
-    public function setAnswer()
+    public function ifSpecialInput($input)
     {
-        $inputMessage = $this->getMessage();
+        return in_array($input, [self::BACK, self::HOME]);
+    }
 
-        if ($inputMessage['text'] == self::HOME) {
-            $array = [];
-            foreach ($this->menu as $key => $value) {
-                $array[] = array(array("text" => $key));
-            }
+    public function keyboardGenerator($menu, $extraButton = null)
+    {
+        $array = [];
+        foreach ($menu as $key => $value) {
+            $array[] = array(array("text" => $key));
+        }
 
-            $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard($array);
-        } elseif($inputMessage['text'] == self::BACK) {
+        if (!$extraButton) {
+            $array[] = $extraButton;
+
+        }
+
+        return $array;
+    }
+
+    public function generateDefaultKeyboard($chatID, $message = self::SELECT_ONE_ITEM)
+    {
+        $keyboard = $this->keyboardGenerator($this->menu);
+        $this->setMessage($chatID, $message)->addKeyboard($keyboard);
+    }
+
+    public function specialInputHandler($input, $chatID)
+    {
+        if ($input == self::HOME) {
+            $this->generateDefaultKeyboard($chatID);
+        } elseif ($input == self::BACK) {
             $searchResultd = $this->searchInMenuFindParent($this->userBack, $this->menu);
             if ($searchResultd == null) {
-                $array = [];
-                foreach ($this->menu as $key => $value) {
-                    $array[] = array(array("text" => $key));
-                }
-    
-                $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard($array);
+                $this->generateDefaultKeyboard($chatID);
             } else {
                 $searchResult = $this->searchInMenu($searchResultd, $this->menu);
                 if ($searchResult == null) {
-                    $array = [];
-                    foreach ($this->menu as $key => $value) {
-                        $array[] = array(array("text" => $key));
-                    }
-        
-                    $this->setMessage($inputMessage['chatID'], self::NOT_FOUND)->addKeyboard(
-                        $array
-                    );
+                    $this->generateDefaultKeyboard($chatID, self::NOT_FOUND);
                 } elseif (is_array($searchResult)) {
-                    $array = [];
-                    foreach ($searchResult as $key => $value) {
-                        $array[] = array(array("text" => $key));
-                    }
-                    $array[] = array(array("text" => self::BACK), array("text" => self::HOME));
-                    // $array[] = array();
-        
-        
-                    $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard($array);
+                    $keyboard = $this->keyboardGenerator($searchResult, array(array("text" => self::BACK), array("text" => self::HOME)));
+                    $this->setMessage($chatID, self::SELECT_ONE_ITEM)->addKeyboard($keyboard);
                 } else {
-                    $this->setMessage($inputMessage['chatID'], $searchResult);
+                    $this->setMessage($chatID, $searchResult);
                 }
-
-
-
             }
+        }
+    }
+
+    public function setAnswer()
+    {
+        $inputMessage = $this->getMessage();
+        $this->getUser($inputMessage['text'], $inputMessage['name'], $inputMessage['chatID']);
+
+        if ($this->ifSpecialInput($inputMessage['text'])) {
+            $this->specialInputHandler($inputMessage['text'], $inputMessage['chatID']);
         } else {
             $searchResult = $this->searchInMenu($inputMessage['text'], $this->menu);
             if ($searchResult == null) {
-                $array = [];
-                foreach ($this->menu as $key => $value) {
-                    $array[] = array(array("text" => $key));
-                }
-    
-                $this->setMessage($inputMessage['chatID'], self::NOT_FOUND)->addKeyboard(
-                    $array
-                );
+                $this->generateDefaultKeyboard($inputMessage['chatID'], self::NOT_FOUND);
             } elseif (is_array($searchResult)) {
-                $array = [];
-                foreach ($searchResult as $key => $value) {
-                    $array[] = array(array("text" => $key));
-                }
-                $array[] = array(array("text" => self::BACK), array("text" => self::HOME));
-
-    
-    
-                $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard($array);
+                $keyboard = $this->keyboardGenerator($searchResult, array(array("text" => self::BACK), array("text" => self::HOME)));
+                $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard($keyboard);
             } else {
                 $this->setMessage($inputMessage['chatID'], $searchResult);
             }
         }
-
-
     }
 
     public function searchInMenu($input, $menu)
@@ -151,15 +146,39 @@ class Telegram {
     {
         $contents = file_get_contents("php://input");
         $this->content = json_decode($contents, true);
-        
-
-        $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
-        fwrite($myfile, "______________________________" . PHP_EOL);
-        fwrite($myfile, $contents);
-        fwrite($myfile, "______________________________" . PHP_EOL);
-        fclose($myfile);
+        $this->logger->info("getUpdate content", $this->content);
 
         return $this->content;
+    }
+
+    public function getUser($text, $name, $chatID)
+    {
+        try {
+            $searchResult = $this->searchInMenuFindParent($text, $this->menu);
+            $user = $this->repo->getUserByChatId($chatID);
+            if ($searchResult) {
+                if ($user) {
+                    $this->userBack = $user->getCurrentMenuName();
+                    $user = $this->repo->updateUser($user, $name, $text);
+                } else {
+                    $user = $this->repo->addNewUser($name, $chatID, $text);
+                }
+            } else {
+                if ($user) {
+                    $this->userBack = $user->getCurrentMenuName();
+                    $user = $this->repo->updateUser($user, $name, null);
+                } else {
+                    $user = $this->repo->addNewUser($name, $chatID, null);
+                }
+            }
+
+            $this->user = $user;
+            if ($text == self::BACK) {
+                $this->repo->updateUser($this->user, null, $this->searchInMenuFindParent($this->userBack, $this->menu));
+            }
+        } catch (\Throwable $th) {
+            $this->logger->error($th->getMessage());
+        }
     }
 
     public function getMessage()
@@ -169,41 +188,14 @@ class Telegram {
 
         if ($this->content != null && isset($this->content["message"])) {
             $message = $this->content["message"];
-            
-            $chatID = $message["chat"]["id"];
-            $name = $message["chat"]["first_name"];
-            $text   = $message["text"];
-            try {
-
-                $searchResultd = $this->searchInMenu($text, $this->menu);
-                if (is_array($searchResultd)) {
-                    $res = $this->repo->getUser($name, $chatID, $text);
-                } else {
-                    $res = $this->repo->getUser($name, $chatID, null);
-                }
-
-                $this->user = $res[0];
-                $this->userBack = $res[1];
-
-                if ($text == self::BACK) {
-                    $this->repo->updateUser($this->user, null, $this->searchInMenuFindParent($this->userBack, $this->menu));
-                }
-
-            } catch (\Throwable $th) {
-
-                $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
-                fwrite($myfile, "tttttttttttttttttttttt".$th->getMessage() . PHP_EOL);
-                fclose($myfile);
-            }
-        }
-
-        if ($text == "/start") {
-            
+            $chatID  = $message["chat"]["id"];
+            $name    = $message["chat"]["first_name"];
+            $text    = $message["text"];
         }
 
         return [
             "chatID" => $chatID, 
-            "name" => $chatID, 
+            "name" => $name, 
             "text" => $text, 
         ];
     }
@@ -243,19 +235,7 @@ class Telegram {
     public function sendMessage()
     {
         $string = $this->botUrl."sendMessage?".http_build_query($this->message);
-
-
-        $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
-        fwrite($myfile, 'we are here 3' . PHP_EOL);
-        fwrite($myfile, json_encode($this->message) . PHP_EOL);
-        fclose($myfile);
-
-
-        $myfile = fopen("newfile.txt", "a") or die("Unable to open file!");
-        fwrite($myfile, 'we are here 4' . PHP_EOL);
-        fwrite($myfile, json_encode($string) . PHP_EOL);
-        fclose($myfile);
-
+        $this->logger->info($string);
         file_get_contents($string);
     }
 }

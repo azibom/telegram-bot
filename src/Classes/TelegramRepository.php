@@ -53,18 +53,4 @@ class TelegramRepository {
         $this->entityManager->flush();
         return $user;
     }
-
-    public function getUser($name, $chatId, $currentMenuName)
-    {
-        $user = $this->getUserByChatId($chatId);
-        if ($user == null) {
-            $user = $this->addNewUser($name, $chatId, $currentMenuName);
-            return [$user, null];
-        } else {
-            $back = $user->getCurrentMenuName();
-            $user = $this->updateUser($user, $name, $currentMenuName);
-            return [$user, $back];
-        }
-
-    }
 }
