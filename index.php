@@ -17,7 +17,10 @@ $telegram->addMenu([
         "خواب گربه ها" => "خواب گربه باید مناسب باشد",
     ],
     "فروشگاه گربه" => [
-        "فندق" => "فندق گربه ی زیبایی است",
+        "فندق" => $telegram->message([
+            ["type" => "image", "src" => "AgACAgQAAxkBAAIHw2FDOXwPXl_BHmCGT6Cedj-VAAHH3QACcbYxG9lAGVJMj4HHKaBVwAEAAwIAA3MAAyAE", "caption" => "#fandogh"],
+            ["type" => "text", "text" => "فندق گربه ی زیبایی است"],
+        ]),
         "قصه" => "قصه برای فروش نیست :|",
     ],
     "سوالات متداول" => [
@@ -28,11 +31,6 @@ $telegram->addMenu([
         ],
     ],
     "درباره ی ما" => "ما گوربه میفروشیم",
-    "special" => $telegram->message([
-        ["type" => "text", "text" => "hi hi"],
-        ["type" => "image", "src" => "AgACAgQAAxkBAAIHw2FDOXwPXl_BHmCGT6Cedj-VAAHH3QACcbYxG9lAGVJMj4HHKaBVwAEAAwIAA3MAAyAE"],
-        ["type" => "text", "text" => "hi hi2"],
-    ])
 ]);
 
 $telegram->getUpdate();
