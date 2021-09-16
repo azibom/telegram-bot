@@ -263,7 +263,11 @@ class Telegram {
                 $queryInArray['reply_markup'] = $this->keyboard;
             }
 
-            $string = $this->botUrl."sendMessage?".http_build_query($queryInArray);
+            if (array_key_exists('photo', $queryInArray)) {
+                $string = $this->botUrl."sendPhoto?".http_build_query($queryInArray);
+            } else {
+                $string = $this->botUrl."sendMessage?".http_build_query($queryInArray);
+            }
             $this->logger->info($string);
             file_get_contents($string);
         }
