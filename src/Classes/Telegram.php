@@ -153,9 +153,9 @@ class Telegram {
     public function getUser($text, $name, $chatID)
     {
         try {
-            $searchResult = $this->searchInMenuFindParent($text, $this->menu);
+            $searchResult = $this->searchInMenu($text, $this->menu);
             $user = $this->repo->getUserByChatId($chatID);
-            if ($searchResult) {
+            if (is_array($searchResult)) {
                 if ($user) {
                     $this->userBack = $user->getCurrentMenuName();
                     $user = $this->repo->updateUser($user, $name, $text);
