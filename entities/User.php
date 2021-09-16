@@ -24,7 +24,7 @@ class User
     /** @Column(type="string", nullable=true) **/
     protected $currentMenuName;
 
-    public function __construct(string $name, string $chatId, $currentMenuName, $telegramId)
+    public function __construct(string $name, string $chatId, string $currentMenuName, string $telegramId)
     {
         $this->name = $name;
         $this->chatId = $chatId;

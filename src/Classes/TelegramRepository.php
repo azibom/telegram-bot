@@ -19,13 +19,12 @@ class TelegramRepository {
         } else {
             $this->entityManager = $entityManager;
         }
-
-        $this->qb = $this->entityManager->createQueryBuilder();
     }
 
     public function getConfigByKey($key)
     {
-        $this->qb->select('C')
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->select('C')
             ->from('Config', 'C')
             ->where('C.key = :key')
             ->setParameter(':key', $key);
@@ -50,7 +49,8 @@ class TelegramRepository {
 
     public function getUserByChatId($chatId)
     {
-        $this->qb->select('U')
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->select('U')
             ->from('User', 'U')
             ->where('U.chatId = :chatId')
             ->setParameter(':chatId', $chatId);
@@ -58,9 +58,9 @@ class TelegramRepository {
         return $this->qb->getQuery()->getOneOrNullResult();
     }
 
-    public function addNewUser($name, $chatId, $currentMenuName = null)
+    public function addNewUser($name, $chatId, $currentMenuName = "")
     {
-        $user = new User($name, $chatId, $currentMenuName, null);
+        $user = new User($name, $chatId, $currentMenuName, "");
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
