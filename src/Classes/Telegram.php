@@ -219,16 +219,16 @@ class Telegram {
         $text   = null;
 
         if ($this->content != null && isset($this->content["message"])) {
-            $message = $this->content["message"]     ;
-            $chatID  = $message["chat"]["id"]        ;
+            $message = $this->content["message"];
+            $chatID  = $message["chat"]["id"];
             $name    = $message["chat"]["first_name"];
-            $text    = $message["text"]              ;
+            $text    = $message["text"];
         }
 
         return [
-            "chatID" => $chatID ?? null, 
-            "name" => $name ?? null, 
-            "text" => $text ?? null, 
+            "chatID" => $chatID, 
+            "name" => $name, 
+            "text" => $text, 
         ];
     }
 
