@@ -115,7 +115,6 @@ class Telegram {
             $inputMessage = $this->getMessage();
             $this->getUser($inputMessage['text'], $inputMessage['name'], $inputMessage['chatID']);
             if ($this->admin->checkUserIsAdmin($this->user)) {
-                $this->adminKeyboard = [];
                 $this->adminKeyboard[] = array(array("text" => self::ADD_MENU), array("text" => self::ADD_SUB_MENU));
                 $this->adminKeyboard[] = array(array("text" => self::DELETE_MENU), array("text" => self::DELETE_SUB_MENU));
                 $this->adminKeyboard[] = array(array("text" => self::ADD_CONTENT));
@@ -288,6 +287,12 @@ class Telegram {
 
     public function addKeyboard($keyboard)
     {
+        if (!empty($this->adminKeyboard)) {
+            foreach ($this->adminKeyboard as $value) {
+                $keyboard[] = $value;
+            }
+        }
+
         $inlineKeyboard = array(
             "keyboard" => $keyboard
         );
@@ -303,11 +308,6 @@ class Telegram {
                 $queryInArray = $this->message[$i];
 
                 if ($this->keyboard && ($i + 1) == count($this->message)) {
-                    // if (is_array($this->adminKeyboard) && !empty($this->adminKeyboard)) {
-                    //     foreach ($this->adminKeyboard as $value) {
-                    //         $this->keyboard[] = $value;
-                    //     }
-                    // }
                     $queryInArray['reply_markup'] = $this->keyboard;
                 }
 
