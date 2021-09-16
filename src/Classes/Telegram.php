@@ -111,31 +111,36 @@ class Telegram {
 
     public function setAnswer()
     {
-        $inputMessage = $this->getMessage();
-        $this->getUser($inputMessage['text'], $inputMessage['name'], $inputMessage['chatID']);
-        if ($this->admin->checkUserIsAdmin($this->user)) {
-            $this->adminKeyboard = [];
-            $this->adminKeyboard[] = array(array("text" => self::ADD_MENU), array("text" => self::ADD_SUB_MENU));
-            $this->adminKeyboard[] = array(array("text" => self::DELETE_MENU), array("text" => self::DELETE_SUB_MENU));
-            $this->adminKeyboard[] = array(array("text" => self::ADD_CONTENT));
-        } else {
-            if ($this->admin->checkPass($inputMessage['text'])) {
-                $this->user = $this->admin->setAdminFlag($this->user);
-            }
-        }
-
-        if ($this->ifSpecialInput($inputMessage['text'])) {
-            $this->specialInputHandler($inputMessage['text'], $inputMessage['chatID']);
-        } else {
-            $searchResult = $this->searchInMenu($inputMessage['text'], $this->menu);
-            if ($searchResult == null) {
-                $this->generateDefaultKeyboard($inputMessage['chatID'], self::NOT_FOUND);
-            } elseif (is_array($searchResult)) {
-                $keyboard = $this->keyboardGenerator($searchResult, array(array("text" => self::BACK), array("text" => self::HOME)));
-                $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard($keyboard);
+        try {
+            $inputMessage = $this->getMessage();
+            $this->getUser($inputMessage['text'], $inputMessage['name'], $inputMessage['chatID']);
+            if ($this->admin->checkUserIsAdmin($this->user)) {
+                $this->adminKeyboard = [];
+                $this->adminKeyboard[] = array(array("text" => self::ADD_MENU), array("text" => self::ADD_SUB_MENU));
+                $this->adminKeyboard[] = array(array("text" => self::DELETE_MENU), array("text" => self::DELETE_SUB_MENU));
+                $this->adminKeyboard[] = array(array("text" => self::ADD_CONTENT));
             } else {
-                $this->setMessage($inputMessage['chatID'], $searchResult);
+                if ($this->admin->checkPass($inputMessage['text'])) {
+                    $this->user = $this->admin->setAdminFlag($this->user);
+                }
             }
+
+            if ($this->ifSpecialInput($inputMessage['text'])) {
+                $this->specialInputHandler($inputMessage['text'], $inputMessage['chatID']);
+            } else {
+                $searchResult = $this->searchInMenu($inputMessage['text'], $this->menu);
+                if ($searchResult == null) {
+                    $this->generateDefaultKeyboard($inputMessage['chatID'], self::NOT_FOUND);
+                } elseif (is_array($searchResult)) {
+                    $keyboard = $this->keyboardGenerator($searchResult, array(array("text" => self::BACK), array("text" => self::HOME)));
+                    $this->setMessage($inputMessage['chatID'], self::SELECT_ONE_ITEM)->addKeyboard($keyboard);
+                } else {
+                    $this->setMessage($inputMessage['chatID'], $searchResult);
+                }
+            }
+        } catch (\Throwable $th) {
+            $this->logger->error($th->getMessage());
+            $this->logger->error($th->getTraceAsString());
         }
     }
 
@@ -289,23 +294,29 @@ class Telegram {
 
     public function sendMessage()
     {
-        for ($i=0; $i < count($this->message); $i++) { 
-            $queryInArray = $this->message[$i];
+        try {
+            for ($i=0; $i < count($this->message); $i++) { 
+                $queryInArray = $this->message[$i];
 
-            if ($this->keyboard && ($i + 1) == count($this->message)) {
-                if ($this->adminKeyboard) {
-                    $this->keyboard = array_merge($this->keyboard, $this->adminKeyboard);
+                if ($this->keyboard && ($i + 1) == count($this->message)) {
+                    if ($this->adminKeyboard) {
+                        $this->keyboard = array_merge($this->keyboard, $this->adminKeyboard);
+                    }
+                    $queryInArray['reply_markup'] = $this->keyboard;
                 }
-                $queryInArray['reply_markup'] = $this->keyboard;
-            }
 
-            if (array_key_exists('photo', $queryInArray)) {
-                $string = $this->botUrl."sendPhoto?".http_build_query($queryInArray);
-            } else {
-                $string = $this->botUrl."sendMessage?".http_build_query($queryInArray);
+                if (array_key_exists('photo', $queryInArray)) {
+                    $string = $this->botUrl."sendPhoto?".http_build_query($queryInArray);
+                } else {
+                    $string = $this->botUrl."sendMessage?".http_build_query($queryInArray);
+                }
+                $this->logger->info($string);
+                $this->logger->info($string);
+                file_get_contents($string);
             }
-            $this->logger->info($string);
-            file_get_contents($string);
+        } catch (\Throwable $th) {
+            $this->logger->error($th->getMessage());
+            $this->logger->error($th->getTraceAsString());
         }
     }
 }
