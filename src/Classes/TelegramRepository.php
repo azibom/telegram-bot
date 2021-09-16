@@ -4,6 +4,7 @@ namespace TelegramBot\Classes;
 
 use Doctrine\ORM\EntityManager;
 use User;
+use Config;
 
 require_once(__DIR__ . '/../../bootstrap.php');
 
@@ -22,6 +23,31 @@ class TelegramRepository {
         $this->qb = $this->entityManager->createQueryBuilder();
     }
 
+    public function getConfigByKey($key)
+    {
+        $this->qb->select('C')
+            ->from('Config', 'C')
+            ->where('C.key = :key')
+            ->setParameter(':key', $key);
+            
+        return $this->qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function addNewConfig($key, $value)
+    {
+        $config = new Config($key, $value);
+        $this->entityManager->persist($config);
+        $this->entityManager->flush();
+
+        return $config;
+    }
+
+    public function updateConfig(Config $config)
+    {
+        $this->entityManager->flush();
+        return $config;
+    }
+
     public function getUserByChatId($chatId)
     {
         $this->qb->select('U')
@@ -34,7 +60,7 @@ class TelegramRepository {
 
     public function addNewUser($name, $chatId, $currentMenuName)
     {
-        $user = new User($name, $chatId, $currentMenuName);
+        $user = new User($name, $chatId, $currentMenuName, "");
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 

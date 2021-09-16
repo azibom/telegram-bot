@@ -10,6 +10,14 @@ class Telegram {
     CONST SELECT_ONE_ITEM = "لطفا یک دستور را انتخاب کنید";
     CONST HOME = "منو اصلی";
     CONST BACK = "بازگشت";
+
+    CONST ADD_MENU = "اضافه کردن منو";
+    CONST ADD_SUB_MENU = "اضافه کردن زیر منو";
+
+    CONST DELETE_MENU = "حذف منو";
+    CONST DELETE_SUB_MENU = "حذف زیر منو";
+
+    CONST ADD_CONTENT = "اضافه کردن محتوا";
     
     private $botToken;
     private $botUrl;
@@ -21,6 +29,7 @@ class Telegram {
     private $user;
     private $userBack = null;
     private $logger = null;
+    private $adminKeyboard = null;
 
     public function __construct($botToken, $repo)
     {
@@ -29,6 +38,7 @@ class Telegram {
         $this->botUrl = self::BASE_BOT_URL . $botToken . "/";
 
         $this->logger = getLogger();
+        $this->admin = new TelegramAdmin("1234");
     }
 
     public function message($message)
@@ -38,7 +48,13 @@ class Telegram {
 
     public function addMenu($menu)
     {
-        $this->menu = $menu;
+        $DB = $this->repo->getConfigByKey("database");
+        if ($DB) {
+            $this->menu = json_decode($DB, true);
+        } else {
+            $this->repo->addNewConfig("database", json_encode($this->menu));
+            $this->menu = $menu;
+        }
     }
 
     public function ifSpecialInput($input)
@@ -92,6 +108,16 @@ class Telegram {
     {
         $inputMessage = $this->getMessage();
         $this->getUser($inputMessage['text'], $inputMessage['name'], $inputMessage['chatID']);
+        if ($this->admin->checkUserIsAdmin($this->user)) {
+            $this->adminKeyboard = [];
+            $this->adminKeyboard[] = array(array("text" => self::ADD_MENU), array("text" => self::ADD_SUB_MENU));
+            $this->adminKeyboard[] = array(array("text" => self::DELETE_MENU), array("text" => self::DELETE_SUB_MENU));
+            $this->adminKeyboard[] = array(array("text" => self::ADD_CONTENT));
+        } else {
+            if ($this->admin->checkPass($inputMessage['text'])) {
+                $this->user = $this->admin->setAdminFlag($this->user);
+            }
+        }
 
         if ($this->ifSpecialInput($inputMessage['text'])) {
             $this->specialInputHandler($inputMessage['text'], $inputMessage['chatID']);
@@ -261,6 +287,9 @@ class Telegram {
             $queryInArray = $this->message[$i];
 
             if ($this->keyboard && ($i + 1) == count($this->message)) {
+                if ($this->adminKeyboard) {
+                    $this->keyboard = array_merge($this->keyboard, $this->adminKeyboard);
+                }
                 $queryInArray['reply_markup'] = $this->keyboard;
             }
 
